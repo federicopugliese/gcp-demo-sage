@@ -132,6 +132,9 @@ Lo script chunka ogni documento, calcola l'embedding di ogni chunk con Vertex AI
 scrive nella collection Firestore `chunks`. Rilanciarlo dopo aver modificato un file è
 sicuro: i chunk di quel documento vengono sostituiti, non duplicati.
 
+> Su un progetto appena creato la quota Vertex AI per le richieste di embedding può essere
+> molto bassa nei primi minuti (`429 RESOURCE_EXHAUSTED`): riprova dopo circa un minuto.
+
 ### 6. Avvia e testa l'API in locale
 
 ```bash
