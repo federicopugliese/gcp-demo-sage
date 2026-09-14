@@ -51,6 +51,11 @@ approvazione prima di `apply`.
 
 ## Troubleshooting
 
+- **I workflow non compaiono nel tab Actions / `gh workflow run` risponde "workflow not
+  found on the default branch"** — al primissimo push su un repository nuovo GitHub a volte
+  impiega qualche minuto a indicizzare i workflow che hanno solo `workflow_dispatch` come
+  trigger. Se dopo qualche minuto non compaiono ancora, un piccolo commit che tocchi
+  direttamente i file in `.github/workflows/` forza la re-indicizzazione.
 - **`terraform.yml` fallisce su "permission denied" durante `plan`** — il service account
   `github-deployer` non ha ancora (o ha perso) `roles/editor`: ricontrolla il passo 4 dello
   script di bootstrap.
