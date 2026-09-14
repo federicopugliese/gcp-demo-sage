@@ -55,7 +55,8 @@ def main() -> None:
     args = parser.parse_args()
 
     data_dir = Path(args.data_dir)
-    md_files = sorted(data_dir.glob("*.md"))
+    # README.md documents the data/ folder itself for students, it's not course content.
+    md_files = sorted(p for p in data_dir.glob("*.md") if p.name.lower() != "readme.md")
     if not md_files:
         log.warning("Nessun file .md trovato in %s", data_dir)
         return
