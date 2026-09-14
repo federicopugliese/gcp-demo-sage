@@ -43,6 +43,7 @@ terraform plan  -var-file=terraform.tfvars
 terraform apply -var-file=terraform.tfvars
 ```
 
-In CI, lo stesso flusso gira nel workflow `terraform.yml`: `plan` su ogni pull request che
-tocca `devops/cloud/**`, poi un job `approval` che attende un'approvazione manuale su una
+In CI, lo stesso flusso gira nel workflow `terraform.yml`, avviato manualmente (tab
+**Actions** del repository → *terraform* → *Run workflow*, oppure `gh workflow run
+terraform.yml`): `plan`, poi un job `approval` che attende un'approvazione manuale su una
 issue GitHub prima di eseguire `apply` sul piano già salvato.

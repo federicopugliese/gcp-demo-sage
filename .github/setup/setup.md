@@ -41,8 +41,13 @@ job `approval` di `terraform.yml` deve poter aprire una issue per il gate di app
 ## 4. (Consigliato) Protezione del branch main
 
 **Settings → Branches**: aggiungi una regola su `main` che richieda una pull request prima
-del merge, così ogni modifica a `devops/cloud/**` passa dal workflow `terraform.yml` (job
-`plan` automatico, poi approvazione manuale prima di `apply`).
+del merge, così ogni modifica a `devops/cloud/**` passa da una review prima di lanciare
+manualmente `terraform.yml` (tab **Actions** → *Run workflow*) per il `plan` e la successiva
+approvazione prima di `apply`.
+
+> Su repository **privati** con un account GitHub Free questa regola non è disponibile
+> (l'API risponde `403 Upgrade to GitHub Pro or make this repository public`): è comunque
+> solo un consiglio, il resto del setup funziona lo stesso senza.
 
 ## Troubleshooting
 

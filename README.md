@@ -102,8 +102,9 @@ statiche) e ti guida nella configurazione delle variabili del repository GitHub.
 
 ### 4. Crea l'infrastruttura con Terraform
 
-In locale (o apri una pull request che tocca `devops/cloud/**` e lascia fare al workflow
-`terraform.yml`, che richiede un'approvazione manuale prima di applicare):
+In locale (oppure lancia manualmente il workflow `terraform.yml` — tab **Actions** del
+repository → *terraform* → *Run workflow* — che fa `plan` e poi richiede un'approvazione
+manuale su una issue prima di applicare):
 
 ```bash
 cd devops/cloud
