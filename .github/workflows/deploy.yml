@@ -1,0 +1,47 @@
+name: deploy
+
+# Pipeline applicativa: build dell'immagine e deploy su Cloud Run. Separata dalla pipeline
+# Terraform (terraform.yml), che gestisce solo l'infrastruttura.
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.WIF_PROVIDER }}
+          service_account: ${{ vars.WIF_SERVICE_ACCOUNT }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configura Docker per Artifact Registry
+        run: gcloud auth configure-docker "${{ vars.REGION }}-docker.pkg.dev" --quiet
+
+      - name: Calcola il tag immagine
+        id: image
+        run: |
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          IMAGE="${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/sage/sage:${SHORT_SHA}"
+          echo "tag=$IMAGE" >> "$GITHUB_OUTPUT"
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: sources/backend
+          push: true
+          tags: ${{ steps.image.outputs.tag }}
+
+      - name: Deploy su Cloud Run
+        run: |
+          gcloud run deploy sage \
+            --project "${{ vars.PROJECT_ID }}" \
+            --region "${{ vars.REGION }}" \
+            --image "${{ steps.image.outputs.tag }}"
