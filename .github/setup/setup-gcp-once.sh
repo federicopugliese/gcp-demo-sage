@@ -55,20 +55,14 @@ gcloud iam service-accounts create "$SA_NAME" \
   || echo "    Service account già esistente, continuo"
 
 # NOTA didattica: roles/owner è volutamente ampio, per tenere semplice il bootstrap di un
-# progetto usa-e-getta a uso corso. roles/editor NON basta: Terraform deve anche impostare
-# policy IAM (google_project_iam_member per il service account runtime sage_run,
-# google_cloud_run_v2_service_iam_member per l'accesso pubblico), e roles/editor esclude
-# deliberatamente i permessi setIamPolicy (è una misura anti-escalation di GCP, non
-# dipende da quanto altro sia ampio il ruolo) — con solo editor, `terraform apply` fallisce
-# con "Error 403: ... Policy update access denied" / "Permission ... setIamPolicy denied".
-# In un progetto reale si userebbe un set di ruoli granulari invece di owner (run.admin,
-# artifactregistry.writer, datastore.owner, bigquery.admin, storage.admin,
-# iam.serviceAccountUser, serviceusage.serviceUsageAdmin, resourcemanager.projectIamAdmin),
-# ma per un progetto didattico owner è più semplice e altrettanto sicuro (nessuna chiave
-# statica: l'unico modo per usare queste credenziali è tramite Workload Identity Federation
-# dal repository GitHub configurato sopra). Nota bene: questo è il service account che
-# orchestra il deploy, non quello con cui gira l'app — quello (sage_run in
-# devops/cloud/iam.tf) ha solo i permessi minimi necessari a runtime.
+# progetto usa-e-getta a uso corso. roles/editor non basta: esclude i permessi setIamPolicy
+# (misura anti-escalation di GCP), necessari ai binding IAM creati da Terraform
+# (devops/cloud/iam.tf, cloud_run.tf). In un progetto reale si userebbe un set di ruoli
+# granulari (run.admin, artifactregistry.writer, datastore.owner, bigquery.admin,
+# storage.admin, iam.serviceAccountUser, serviceusage.serviceUsageAdmin,
+# resourcemanager.projectIamAdmin). Nota bene: questo è il service account che orchestra
+# il deploy, non quello con cui gira l'app — quello (sage_run in devops/cloud/iam.tf) ha
+# solo i permessi minimi necessari a runtime.
 echo "==> Assegno roles/owner al service account CI (vedi nota nello script)"
 gcloud projects add-iam-policy-binding "$PROJECT_ID" \
   --member="serviceAccount:${SA_EMAIL}" \

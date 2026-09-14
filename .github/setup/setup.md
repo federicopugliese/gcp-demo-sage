@@ -51,17 +51,13 @@ approvazione prima di `apply`.
 
 ## Troubleshooting
 
-- **I workflow non compaiono nel tab Actions / `gh workflow run` risponde "workflow not
-  found on the default branch"** — al primissimo push su un repository nuovo GitHub a volte
-  impiega qualche minuto a indicizzare i workflow che hanno solo `workflow_dispatch` come
-  trigger. Se dopo qualche minuto non compaiono ancora, un piccolo commit che tocchi
-  direttamente i file in `.github/workflows/` forza la re-indicizzazione.
-- **`terraform.yml` fallisce su "permission denied" durante `plan` o `apply`** — il service
-  account `github-deployer` non ha ancora (o ha perso) `roles/owner`: ricontrolla il passo 4
-  dello script di bootstrap. In particolare, un errore su `apply` del tipo `Policy update
-  access denied` / `Permission '...setIamPolicy' denied` con `roles/editor` assegnato invece
-  di `roles/owner` è atteso: `editor` esclude deliberatamente i permessi che impostano
-  policy IAM, che servono per i binding creati da `devops/cloud/iam.tf` e `cloud_run.tf`.
+- **I workflow non compaiono nel tab Actions / `gh workflow run` dice "workflow not found
+  on the default branch"** — GitHub può impiegare qualche minuto a indicizzare workflow con
+  solo `workflow_dispatch` su un repository appena creato. Un commit che tocchi direttamente
+  i file in `.github/workflows/` forza la re-indicizzazione.
+- **`terraform.yml` fallisce su "permission denied" (`Policy update access denied` /
+  `setIamPolicy`) durante `plan` o `apply`** — il service account `github-deployer` non ha
+  (o ha perso) `roles/owner`: ricontrolla il passo 4 dello script di bootstrap.
 - **Il job `approval` resta bloccato** — verifica che `APPROVERS` contenga esattamente il
   tuo username GitHub (case-sensitive) e che il repository possa creare issue (passo 3).
 - **`deploy.yml` fallisce su "repository not found" in Artifact Registry** — assicurati di
