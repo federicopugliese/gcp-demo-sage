@@ -45,3 +45,4 @@ jobs:
             --project "${{ vars.PROJECT_ID }}" \
             --region "${{ vars.REGION }}" \
             --image "${{ steps.image.outputs.tag }}"
+
