@@ -1,11 +1,9 @@
-"""Thin async wrapper around the Gemini text-generation call."""
+"""Thin async wrapper around the Gemini text-generation call.
 
-from sage.config import get_app_config
-from sage.integrations.llm.client import get_genai_client
+MOCK: returns a canned string instead of calling Vertex AI. Replace with a real call to
+the Google Gen AI SDK's `generate_content` (see esercizio 09_librerie_python).
+"""
 
 
 async def generate_text(prompt: str) -> str:
-    config = get_app_config()
-    client = get_genai_client()
-    response = await client.aio.models.generate_content(model=config.chat_model, contents=prompt)
-    return response.text
+    return "[MOCK] Nessun modello collegato: implementa integrations/llm/generate.py."

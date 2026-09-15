@@ -102,9 +102,15 @@ statiche) e ti guida nella configurazione delle variabili del repository GitHub.
 
 ### 4. Crea l'infrastruttura con Terraform
 
-In locale (oppure lancia manualmente il workflow `terraform.yml` — tab **Actions** del
-repository → *terraform* → *Run workflow* — che fa `plan` e poi richiede un'approvazione
-manuale su una issue prima di applicare):
+`devops/cloud/` parte senza risorse: i file `.tf` (bucket, Firestore, BigQuery, Cloud Run,
+IAM, Artifact Registry, ...) li scrivi tu, modulo per modulo, seguendo gli esercizi del
+corso. Restano già pronti solo i file di configurazione (`backend.hcl`, `terraform.tfvars`,
+copiati dai rispettivi `.example` al passo 2).
+
+Una volta scritte le risorse, il flusso resta questo, in locale (oppure lanciando
+manualmente il workflow `terraform.yml` — tab **Actions** del repository → *terraform* →
+*Run workflow* — che fa `plan` e poi richiede un'approvazione manuale su una issue prima di
+applicare):
 
 ```bash
 cd devops/cloud
